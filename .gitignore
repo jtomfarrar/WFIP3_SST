@@ -161,4 +161,4 @@ cython_debug/
 
 # Data directories
 data/
-
+img/
