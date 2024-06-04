@@ -1,4 +1,5 @@
 #!/bin/bash
+# UPDATE: use rsync only download the files 
 # Sample download script obtained from https://eastcoast.coastwatch.noaa.gov/ecn_data_download_sample.txt
 # ecn_data_download_sample.sh
 
@@ -31,7 +32,7 @@ grep -e 'ACSPOCW_[0-9]\{7\}_DAILY_MULTISAT_SST-NGT_MR_750M.nc4' index.php > file
 # remove extraneous html to generate clean list of filenames to download
 #filenames="$(awk '{print substr($3, 12, index($3,"hdf") - 9)}' filelist.txt)"
 filenames="$(awk '{print substr($3, 13, index($3,"nc4") - 10)}' filelist.txt)"
-YOUR_DIRECTORY="../data/external/SST"
+YOUR_DIRECTORY="/home/yugao/projects/WFIP3_SST/data/external/SST"
 
 for file in $filenames ; do
     echo Starting $file

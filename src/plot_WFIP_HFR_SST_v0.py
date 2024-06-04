@@ -7,7 +7,7 @@
 # %%
 # make sure the working directory is the same as the directory as this script
 import os
-os.chdir('/home/jtomf/Python/WFIP3_SST/src')
+os.chdir('../src')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -132,3 +132,5 @@ for target_day in targets:
 # mask ds2 to values below .2 m/s
 mask = ds2.total_err < 0.15
 ds2 = ds2.where(mask, drop=False)
+
+print("finished running plot_WFIP_HFR_SST_v0.py")

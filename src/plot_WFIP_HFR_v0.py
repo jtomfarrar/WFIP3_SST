@@ -7,7 +7,7 @@
 # %%
 # make sure the working directory is the same as the directory as this script
 import os
-os.chdir('/home/jtomf/Python/WFIP3_SST/src')
+os.chdir('/home/yugao/projects/WFIP3_SST/src')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,7 +23,7 @@ import datetime
 
 # %%
 # %matplotlib inline
-%matplotlib widget
+# %matplotlib widget
 # %matplotlib qt5
 plt.rcParams['figure.figsize'] = (5,4)
 plt.rcParams['figure.dpi'] = 100
@@ -42,7 +42,7 @@ output_dir = '../data/processed/HFR'
 os.system('mkdir  -p ' + output_dir) #make directory if it doesn't exist
 # get a list of *.nc4 files in the data directory
 nc_files = glob.glob(data_dir + '/*.nc')
-nc_files
+print(nc_files)
 
 
 # %%
@@ -84,12 +84,20 @@ today = datetime.date.today()
 ds2.attrs['CREATION_DATE'] = today.strftime('%Y-%m-%d')
 
 # Save daily data to a netCDF file
-ds2.to_netcdf(output_dir + '/NES_HFR_daily.nc')
+
+# Generate a date string for today's date in the format YYYYMMDD
+date_str = datetime.datetime.now().strftime('%Y%m%d')
+
+# Create the filename including the date
+filename = f'NES_HFR_daily_{date_str}.nc'
+
+ds2.to_netcdf(f'{output_dir}/{filename}')
 
 # %%
 # Reloading the data set clears out some wierd behavior from dask/xarray 
 # that keeps everything as 4-D dask arrays despite a singleton dimension
-ds2 = xr.open_dataset(output_dir + '/NES_HFR_daily.nc')
+ds2 = xr.open_dataset(f'{output_dir}/{filename}')
+
 ds2
 # %%
 
@@ -147,7 +155,7 @@ title_str = tstr1
 #title_str=title_str[0]
 plt.title(title_str)
 if savefig:
-    plt.savefig(__figdir__ + 'NES_HFR_current_speed_' + title_str + '.' + plotfiletype, **savefig_args)
+    plt.savefig(__figdir__ + f'NES_HFR_current_speed_{date_str}_' + title_str + '.' + plotfiletype, **savefig_args)
 
 
 

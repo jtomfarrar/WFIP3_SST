@@ -6,7 +6,7 @@
 # %%
 # make sure the working directory is the same as the directory as this script
 import os
-os.chdir('/home/jtomf/Python/WFIP3_SST/src')
+os.chdir('/home/yugao/projects/WFIP3_SST/src')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,7 +26,7 @@ import cartopy
 
 # %%
 # %matplotlib inline
-%matplotlib widget
+# %matplotlib widget
 # %matplotlib qt5
 plt.rcParams['figure.figsize'] = (5,4)
 plt.rcParams['figure.dpi'] = 200
@@ -45,7 +45,8 @@ output_dir = '../data/processed/SST/good_data'
 os.system('mkdir  -p ' + output_dir) #make directory if it doesn't exist
 # get a list of *.nc4 files in the data directory
 nc_files = glob.glob(data_dir + '/*.nc4')
-nc_files
+print('get a list of *.nc4 files in the data directory')
+print(nc_files)
 
 # %%
 # See if xr.open_mfdataset can open all the files at once
@@ -54,9 +55,10 @@ ds
 
 # %%
 # I know that 2024-02-18 had valid data; try to select that time.  
-ds_sub = ds.sel(time='2024-02-18')
-
-
+# ds_sub = ds.sel(time='2024-04-28')
+# 
+ds_sub = ds.isel(time=1)
+# Select data by index instead of date because the dates in the files may shift
 
 # %%
 # Plot the SST
@@ -68,7 +70,7 @@ plt.pcolormesh(ds_sub.lon,ds_sub.lat,ds_sub.sst.squeeze(),transform=ccrs.PlateCa
 plt.xlabel('Longitude')
 plt.ylabel('Latitude')
 plt.colorbar(label='SST (C)')
-datestr = ds_sub.time.dt.strftime('%Y-%m-%d')[0].values
+datestr = ds_sub.time.dt.strftime('%Y-%m-%d').values
 plt.title('Sea Surface Temperature, ' + datestr)
 
 
@@ -157,4 +159,6 @@ ds['frac_not_nan'].attrs['description'] = 'Fraction of data that is not nan'
 # Now write ds to a netcdf file
 ds.to_netcdf(output_dir + '/VIIRS_AVHRR_SST_merged.nc')
 
+# %%
+print("finished running plot_WFIP_SST_v0.py")
 # %%
